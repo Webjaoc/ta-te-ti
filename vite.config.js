@@ -6,4 +6,4 @@ export default defineConfig({
   plugins: [react()],
   base: "https://webjaoc.github.io/ta-te-ti",
 })
-//https://webjaoc.github.io/ta-te-ti
+//
