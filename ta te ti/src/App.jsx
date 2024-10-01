@@ -34,9 +34,17 @@ const Winner_combos = [
 ]
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null))
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = windows.localStorage.getItem('board')
+    if(boardFromStorage) return JSON.parse(boardFromStorage)
+    return Array(9).fill(null)
+  })
 
-  const [turn, setTurn] = useState(TURNS.X)
+  const [turn, setTurn] = useState(() =>  {
+    const turnFromStorage = windows.localStorage.getItem('turn')
+  return turnFromStorage ?? TURNS.X
+  })
+
   const [winner, setWinner] = useState(null)
 
   const checkWinner = (boardToCheck) => {
@@ -57,6 +65,9 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    windows.localStorage.removeItem('board')
+    windows.localStorage.removeItem('turn')
   }
 
   const checkEndGame = (newBoard) => {
@@ -71,6 +82,8 @@ function App() {
 
    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X 
    setTurn(newTurn)
+   windows.localStorage.setItem('board', JSON.stringify(newBoard))
+   windows.localStorage.setItem('turn', newTurn)
    const newWinner = checkWinner(newBoard)
    if(newWinner){
     confetti()
